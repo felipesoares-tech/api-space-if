@@ -1,6 +1,6 @@
 package br.com.felipesoarestech.api.cliente.domain.security;
 
-import br.com.felipesoarestech.api.cliente.domain.model.Cliente;
+import br.com.felipesoarestech.api.cliente.domain.model.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -17,12 +17,12 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generateToken(Cliente cliente){
+    public String generateToken(User user){
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
                     .withIssuer("client-sys")
-                    .withSubject(cliente.getEmail())
+                    .withSubject(user.getEmail())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
             return token;

@@ -1,6 +1,6 @@
 package br.com.felipesoarestech.api.cliente.domain.service;
 
-import br.com.felipesoarestech.api.cliente.domain.repository.ClienteRepository;
+import br.com.felipesoarestech.api.cliente.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 public class AuthorizationService implements UserDetailsService {
 
     @Autowired
-    ClienteRepository clienteRepository;
+    UserRepository userRepository;
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return clienteRepository.findByEmail(email);
+        return userRepository.findByEmail(email);
     }
 }

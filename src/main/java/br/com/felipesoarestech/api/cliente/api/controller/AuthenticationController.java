@@ -2,8 +2,8 @@ package br.com.felipesoarestech.api.cliente.api.controller;
 
 import br.com.felipesoarestech.api.cliente.domain.dto.AuthenticationDTO;
 import br.com.felipesoarestech.api.cliente.domain.dto.LoginResponseDTO;
-import br.com.felipesoarestech.api.cliente.domain.model.Cliente;
-import br.com.felipesoarestech.api.cliente.domain.repository.ClienteRepository;
+import br.com.felipesoarestech.api.cliente.domain.model.User;
+import br.com.felipesoarestech.api.cliente.domain.repository.UserRepository;
 import br.com.felipesoarestech.api.cliente.domain.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +26,13 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private UserRepository userRepository;
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(),data.senha());
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(),data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((Cliente) auth.getPrincipal());
+        var token = tokenService.generateToken((User) auth.getPrincipal());
 
         return ResponseEntity.ok(new LoginResponseDTO(token));
 
@@ -40,12 +40,12 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid AuthenticationDTO data){
-        if(clienteRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
+        if(userRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
 
-        String encryptPassword = new BCryptPasswordEncoder().encode(data.senha());
-        Cliente cliente = new Cliente(data.email(), encryptPassword);
+        String encryptPassword = new BCryptPasswordEncoder().encode(data.password());
+        User user = new User(data.email(), encryptPassword);
 
-        this.clienteRepository.save(cliente);
+        this.userRepository.save(user);
 
         return ResponseEntity.ok().build();
     }

@@ -16,21 +16,20 @@ import java.util.Collection;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cliente implements UserDetails {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String nome;
     @Email
     @NotNull(message = "email é obrigatório")
     private String email;
     @NotNull(message = "senha é obrigatória")
-    private String senha;
+    private String password;
     LocalDateTime datLan;
 
-    public Cliente(String email, String senha){
+    public User(String email, String password){
         this.email = email;
-        this.senha = senha;
+        this.password = password;
     }
 
     @PrePersist
@@ -47,12 +46,12 @@ public class Cliente implements UserDetails {
 
     @Override
     public String getPassword() {
-        return getSenha();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return getEmail();
+        return email;
     }
 
     @Override

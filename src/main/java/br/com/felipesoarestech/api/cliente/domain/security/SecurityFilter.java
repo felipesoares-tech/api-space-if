@@ -1,6 +1,6 @@
 package br.com.felipesoarestech.api.cliente.domain.security;
 
-import br.com.felipesoarestech.api.cliente.domain.repository.ClienteRepository;
+import br.com.felipesoarestech.api.cliente.domain.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     TokenService tokenService;
 
     @Autowired
-    ClienteRepository clienteRepository;
+    UserRepository userRepository;
 
 
     @Override
@@ -28,7 +28,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if(token != null){
             var login = tokenService.validateToken(token);
-            UserDetails user = clienteRepository.findByEmail(login);
+            UserDetails user = userRepository.findByEmail(login);
 
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
