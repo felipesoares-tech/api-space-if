@@ -1,8 +1,10 @@
 package br.com.felipesoarestech.api.cliente.api.controller;
 
 import br.com.felipesoarestech.api.cliente.domain.dto.AuthenticationDTO;
+import br.com.felipesoarestech.api.cliente.domain.dto.LoginResponseDTO;
 import br.com.felipesoarestech.api.cliente.domain.model.Cliente;
 import br.com.felipesoarestech.api.cliente.domain.repository.ClienteRepository;
+import br.com.felipesoarestech.api.cliente.domain.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +23,18 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    private TokenService tokenService;
+
+    @Autowired
     private ClienteRepository clienteRepository;
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(),data.senha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((Cliente) auth.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
 
     }
 
