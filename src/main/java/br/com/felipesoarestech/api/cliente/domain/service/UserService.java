@@ -1,8 +1,8 @@
 package br.com.felipesoarestech.api.cliente.domain.service;
 
 import br.com.felipesoarestech.api.cliente.domain.dto.ClienteDTO;
-import br.com.felipesoarestech.api.cliente.domain.model.Cliente;
-import br.com.felipesoarestech.api.cliente.domain.repository.ClienteRepository;
+import br.com.felipesoarestech.api.cliente.domain.model.User;
+import br.com.felipesoarestech.api.cliente.domain.repository.UserRepository;
 import br.com.felipesoarestech.api.cliente.domain.exception.DuplicateEntityException;
 import br.com.felipesoarestech.api.cliente.domain.exception.EntityNotFoundException;
 import br.com.felipesoarestech.api.cliente.domain.exception.LinkedEntityException;
@@ -13,34 +13,34 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClienteService {
+public class UserService {
     @Autowired
-    ClienteRepository clienteRepository;
+    UserRepository userRepository;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    public Cliente cadastrar(Cliente cliente){
-        if(clienteRepository.findAll().contains(cliente)){
+    public User register(User user){
+        if(userRepository.findAll().contains(user)){
             throw new DuplicateEntityException("this entity is already registered in the system !");
         }
 
-        return clienteRepository.save(cliente);
+        return userRepository.save(user);
     }
-    public void remover(Integer clienteID) {
+    public void delete(Integer clienteID) {
         try {
-            clienteRepository.deleteById(clienteID);
+            userRepository.deleteById(clienteID);
 
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException("entity not found");
 
         } catch (DataIntegrityViolationException e) {
-            throw new LinkedEntityException("Entidade em uso !!!");
+            throw new LinkedEntityException("entity in use !!!");
         }
     }
 
-    public ClienteDTO mapearParaDTO(Cliente cliente) {
-        ClienteDTO clienteDTO = modelMapper.map(cliente, ClienteDTO.class);
+    public ClienteDTO mapearParaDTO(User user) {
+        ClienteDTO clienteDTO = modelMapper.map(user, ClienteDTO.class);
         return clienteDTO;
     }
 }
