@@ -16,7 +16,7 @@ public class Product {
 
     private String name;
 
-    private Integer price;
+    private Double price;
 
     public Product(ProductRequestDTO data){
         this.price = data.price();
