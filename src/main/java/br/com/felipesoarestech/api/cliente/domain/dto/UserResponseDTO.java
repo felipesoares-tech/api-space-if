@@ -1,7 +1,18 @@
 package br.com.felipesoarestech.api.cliente.domain.dto;
 
-public record UserResponseDTO(String email) {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class UserResponseDTO {
+
+    private String email;
+
+    public UserResponseDTO(String email) {
+        this.email = email;
+    }
     public UserResponseDTO() {
-        this(null); // Delega para o construtor canônico com um email nulo
     }
 }
+
