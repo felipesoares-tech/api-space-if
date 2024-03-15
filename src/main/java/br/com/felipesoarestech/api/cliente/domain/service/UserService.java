@@ -22,7 +22,7 @@ public class UserService {
 
     public UserResponseDTO register(User user){
         if(userRepository.findAll().contains(user)){
-            throw new DuplicateEntityException("this entity is already registered in the system !");
+            throw new DuplicateEntityException("Email já cadastrado. Por favor, faça login ou recupere sua senha");
         }
         userRepository.save(user);
 

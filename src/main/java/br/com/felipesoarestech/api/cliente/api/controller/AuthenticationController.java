@@ -3,6 +3,8 @@ package br.com.felipesoarestech.api.cliente.api.controller;
 import br.com.felipesoarestech.api.cliente.domain.dto.UserRequestDTO;
 import br.com.felipesoarestech.api.cliente.domain.dto.LoginResponseDTO;
 import br.com.felipesoarestech.api.cliente.domain.dto.UserResponseDTO;
+import br.com.felipesoarestech.api.cliente.domain.exception.LinkedEntityException;
+import br.com.felipesoarestech.api.cliente.domain.exception.UserPasswordNotExists;
 import br.com.felipesoarestech.api.cliente.domain.model.User;
 import br.com.felipesoarestech.api.cliente.domain.repository.UserRepository;
 import br.com.felipesoarestech.api.cliente.domain.security.TokenService;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +36,16 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid UserRequestDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(),data.password());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+        try{
+            var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((User) auth.getPrincipal());
+            var token = tokenService.generateToken((User) auth.getPrincipal());
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+
+        }catch (AuthenticationException e){
+            throw new UserPasswordNotExists("Usuário ou senha incorretos!!");
+        }
 
     }
 
