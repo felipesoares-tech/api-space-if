@@ -1,6 +1,6 @@
 package br.com.felipesoarestech.api.cliente.domain.service;
 
-import br.com.felipesoarestech.api.cliente.domain.dto.ClienteDTO;
+import br.com.felipesoarestech.api.cliente.domain.dto.UserResponseDTO;
 import br.com.felipesoarestech.api.cliente.domain.model.User;
 import br.com.felipesoarestech.api.cliente.domain.repository.UserRepository;
 import br.com.felipesoarestech.api.cliente.domain.exception.DuplicateEntityException;
@@ -20,12 +20,13 @@ public class UserService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public User register(User user){
+    public UserResponseDTO register(User user){
         if(userRepository.findAll().contains(user)){
-            throw new DuplicateEntityException("this entity is already registered in the system !");
+            throw new DuplicateEntityException("Email já cadastrado. Por favor, faça login ou recupere sua senha");
         }
+        userRepository.save(user);
 
-        return userRepository.save(user);
+        return mapearParaDTO(user);
     }
     public void delete(Integer clienteID) {
         try {
@@ -39,8 +40,8 @@ public class UserService {
         }
     }
 
-    public ClienteDTO mapearParaDTO(User user) {
-        ClienteDTO clienteDTO = modelMapper.map(user, ClienteDTO.class);
-        return clienteDTO;
+    public UserResponseDTO mapearParaDTO(User user) {
+        UserResponseDTO userResponseDTO = modelMapper.map(user, UserResponseDTO.class);
+        return userResponseDTO;
     }
 }

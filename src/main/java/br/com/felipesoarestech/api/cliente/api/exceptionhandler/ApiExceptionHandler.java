@@ -1,9 +1,6 @@
 package br.com.felipesoarestech.api.cliente.api.exceptionhandler;
 
-import br.com.felipesoarestech.api.cliente.domain.exception.DuplicateEntityException;
-import br.com.felipesoarestech.api.cliente.domain.exception.EmailAlreadyExistsException;
-import br.com.felipesoarestech.api.cliente.domain.exception.EntityNotFoundException;
-import br.com.felipesoarestech.api.cliente.domain.exception.InvalidCpfException;
+import br.com.felipesoarestech.api.cliente.domain.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -41,6 +38,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleInvalidCpf(InvalidCpfException e, WebRequest request){
         return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST,request);
     }
+
+    @ExceptionHandler(UserPasswordNotExists.class)
+    public ResponseEntity<?> handleUsuarioPassworNotExists(UserPasswordNotExists e, WebRequest request){
+        return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.UNAUTHORIZED,request);
+    }
+
 
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception e, Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
