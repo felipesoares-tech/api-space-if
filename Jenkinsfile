@@ -5,7 +5,7 @@ pipeline {
         stage ('Build Image') {
             steps {
                 script {
-                    dockerapp = docker.build("felipesoares-tech/api-auth", '-f ./src/Dockerfile ./src')
+                    dockerapp = docker.build("felipesoares-tech/api-auth", '-f ./Dockerfile ./src')
                 } 
             } 
         }
