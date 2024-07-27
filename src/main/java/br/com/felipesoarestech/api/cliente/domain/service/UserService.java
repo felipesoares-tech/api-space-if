@@ -12,6 +12,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 @Service
 public class UserService {
     @Autowired
@@ -43,5 +45,9 @@ public class UserService {
     public UserResponseDTO mapearParaDTO(User user) {
         UserResponseDTO userResponseDTO = modelMapper.map(user, UserResponseDTO.class);
         return userResponseDTO;
+    }
+
+    public boolean verifyBiometricData(User user, byte[] biometricData) {
+        return Arrays.equals(user.getBiometricData(), biometricData);
     }
 }

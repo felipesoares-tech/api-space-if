@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,12 +50,22 @@ public class AuthenticationController {
 
     }
 
+    @PostMapping("/login/biometric")
+    public ResponseEntity<LoginResponseDTO> loginWithBiometrics(@RequestBody @Valid UserRequestDTO data) {
+        User user = (User) userRepository.findByEmail(data.email());
+        if (user != null && userService.verifyBiometricData(user, data.biometricData())) {
+            var token = tokenService.generateToken(user);
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+        }
+        throw new UserPasswordNotExists("Autenticação biométrica falhou!");
+    }
+
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDTO register(@RequestBody @Valid UserRequestDTO data){
         //if(userRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
         String encryptPassword = new BCryptPasswordEncoder().encode(data.password());
-        User user = new User(data.email(), encryptPassword);
+        User user = new User(data.email(),data.name(),encryptPassword,data.biometricData());
 
         return userService.register(user);
     }
