@@ -2,5 +2,5 @@ package br.com.felipesoarestech.api.cliente.domain.dto;
 
 import jakarta.validation.constraints.Email;
 
-public record UserRequestDTO(@Email String email,String name, String password,byte[] biometricData){
+public record UserRequestDTO(@Email String email,String name, String password,String biometricData){
 }

@@ -1,6 +1,8 @@
 package br.com.felipesoarestech.api.cliente.domain.model;
 
+import br.com.felipesoarestech.api.cliente.domain.util.ByteArrayDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -33,11 +35,12 @@ public class User implements UserDetails {
     private String name;
     @NotNull(message = "senha é obrigatória")
     private String password;
-    @Lob
-    private byte[] biometricData;
+//    @Lob
+//    @JsonDeserialize(using = ByteArrayDeserializer.class)
+    private String biometricData;
     LocalDateTime createdAt;
 
-    public User(String email,String name, String password, byte[] biometricData){
+    public User(String email,String name, String password, String biometricData){
         this.email = email;
         this.password = password;
         this.name = name;
@@ -51,13 +54,13 @@ public class User implements UserDetails {
         }
     }
 
-    public void setBiometricData(byte[] biometricData) {
-        this.biometricData = biometricData;
-    }
-
-    public void setBiometricData(String biometricDataBase64) {
-        this.biometricData = Base64.getDecoder().decode(biometricDataBase64);
-    }
+//    public void setBiometricData(String biometricData) {
+//        this.biometricData = biometricData;
+//    }
+//
+//    public void setBiometricData(String biometricDataBase64) {
+//        this.biometricData = Base64.getDecoder().decode(biometricDataBase64);
+//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

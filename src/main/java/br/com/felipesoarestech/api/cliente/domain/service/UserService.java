@@ -47,7 +47,7 @@ public class UserService {
         return userResponseDTO;
     }
 
-    public boolean verifyBiometricData(User user, byte[] biometricData) {
-        return Arrays.equals(user.getBiometricData(), biometricData);
+    public boolean verifyBiometricData(User user, String biometricData) {
+        return user.getBiometricData().equals(biometricData);
     }
 }

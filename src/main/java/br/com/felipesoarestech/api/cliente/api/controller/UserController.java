@@ -67,11 +67,14 @@ public class UserController {
 
         sourceData.forEach((nomePropriedade, valorPropriedade) -> {
             Field field = ReflectionUtils.findField(User.class, nomePropriedade);
-            field.setAccessible(true);
-
-            Object newValue = ReflectionUtils.getField(field, sourceUser);
-
-            ReflectionUtils.setField(field, targetUser, newValue);
+            if (field != null) {
+                field.setAccessible(true);
+                Object newValue = ReflectionUtils.getField(field, sourceUser);
+                if (newValue != null && field.getType() == byte[].class) {
+                    newValue = ((String) newValue).getBytes(); // Ajuste conforme necessário
+                }
+                ReflectionUtils.setField(field, targetUser, newValue);
+            }
         });
     }
 
