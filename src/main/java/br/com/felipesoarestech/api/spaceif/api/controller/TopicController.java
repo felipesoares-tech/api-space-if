@@ -41,5 +41,10 @@ public class TopicController {
     public ResponseEntity<List<TopicResponse>> getAllTopics() {
         return ResponseEntity.ok(repository.findAll().stream().map(TopicResponse::new).toList());
     }
+
+    @GetMapping(value ="/byUser",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TopicResponse>> getAllTopicsByUser(@RequestParam(value = "id", required = false) int id) {
+        return ResponseEntity.ok(repository.findByUserId(id).stream().map(TopicResponse::new).toList());
+    }
 }
 
