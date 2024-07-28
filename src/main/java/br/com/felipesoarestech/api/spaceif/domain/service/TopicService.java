@@ -3,6 +3,7 @@ package br.com.felipesoarestech.api.spaceif.domain.service;
 import br.com.felipesoarestech.api.spaceif.domain.dto.input.TopicRequest;
 import br.com.felipesoarestech.api.spaceif.domain.model.Topic;
 import br.com.felipesoarestech.api.spaceif.domain.repository.TopicRepository;
+import br.com.felipesoarestech.api.spaceif.domain.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,7 @@ public class TopicService {
     private ModelMapper modelMapper;
 
     public ResponseEntity<Topic> save(TopicRequest topic){
-        Topic topicSave = topicRepository.save(new Topic(topic));
+        Topic topicSave = topicRepository.save(new Topic(topic, SecurityUtil.getAuthenticatedUser()));
         return ResponseEntity.status(HttpStatus.CREATED).body(topicSave);
     }
 

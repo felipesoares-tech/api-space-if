@@ -33,7 +33,8 @@ public class TopicController {
                                            @RequestParam("shortDescription") String shortDescription,
                                            @RequestParam("longDescription") String longDescription,
                                            @RequestParam(value = "image", required = false) MultipartFile image) throws IOException {
-        return topicService.save(new TopicRequest(title,shortDescription,longDescription,image.getBytes()));
+        byte [] saveImage = image != null ? image.getBytes() : null; //A imagem pode ser enviada ou não.
+        return topicService.save(new TopicRequest(title,shortDescription,longDescription,saveImage));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
