@@ -38,24 +38,8 @@ public class TopicController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PageResponse<TopicResponse>> getAllTopics(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Topic> topicsPage = repository.findAll(pageable);
-
-        List<TopicResponse> topicResponses = topicsPage.getContent().stream()
-                .map(TopicResponse::new)
-                .collect(Collectors.toList());
-
-        PageResponse<TopicResponse> pageResponse = new PageResponse<>(
-                topicsPage.getNumber(),
-                topicsPage.getTotalPages(),
-                topicResponses
-        );
-
-        return ResponseEntity.ok(pageResponse);
+    public ResponseEntity<List<TopicResponse>> getAllTopics() {
+        return ResponseEntity.ok(repository.findAll().stream().map(TopicResponse::new).toList());
     }
 }
 
