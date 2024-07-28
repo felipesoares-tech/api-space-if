@@ -1,6 +1,6 @@
 package br.com.felipesoarestech.api.spaceif.domain.model;
 
-import br.com.felipesoarestech.api.spaceif.domain.dto.TopicRequestDTO;
+import br.com.felipesoarestech.api.spaceif.domain.dto.input.TopicRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -23,7 +23,7 @@ public class Topic {
     @Column(columnDefinition = "LONGBLOB")
     private byte [] image;
 
-    public Topic(TopicRequestDTO data){
+    public Topic(TopicRequest data){
         this.title = data.tittle();
         this.shortDescription = data.shortDescription();
         this.longDescription = data.longDescription();

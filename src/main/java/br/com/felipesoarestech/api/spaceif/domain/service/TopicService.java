@@ -1,6 +1,6 @@
 package br.com.felipesoarestech.api.spaceif.domain.service;
 
-import br.com.felipesoarestech.api.spaceif.domain.dto.TopicRequestDTO;
+import br.com.felipesoarestech.api.spaceif.domain.dto.input.TopicRequest;
 import br.com.felipesoarestech.api.spaceif.domain.model.Topic;
 import br.com.felipesoarestech.api.spaceif.domain.repository.TopicRepository;
 import org.modelmapper.ModelMapper;
@@ -17,7 +17,7 @@ public class TopicService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public ResponseEntity<Topic> save(TopicRequestDTO topic){
+    public ResponseEntity<Topic> save(TopicRequest topic){
         Topic topicSave = topicRepository.save(new Topic(topic));
         return ResponseEntity.status(HttpStatus.CREATED).body(topicSave);
     }

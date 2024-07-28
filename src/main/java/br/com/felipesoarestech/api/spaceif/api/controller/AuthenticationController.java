@@ -1,8 +1,8 @@
 package br.com.felipesoarestech.api.spaceif.api.controller;
 
-import br.com.felipesoarestech.api.spaceif.domain.dto.UserRequestDTO;
-import br.com.felipesoarestech.api.spaceif.domain.dto.LoginResponseDTO;
-import br.com.felipesoarestech.api.spaceif.domain.dto.UserResponseDTO;
+import br.com.felipesoarestech.api.spaceif.domain.dto.input.UserRequest;
+import br.com.felipesoarestech.api.spaceif.domain.dto.output.LoginResponse;
+import br.com.felipesoarestech.api.spaceif.domain.dto.output.UserResponse;
 import br.com.felipesoarestech.api.spaceif.domain.exception.UserPasswordNotExists;
 import br.com.felipesoarestech.api.spaceif.domain.model.User;
 import br.com.felipesoarestech.api.spaceif.domain.repository.UserRepository;
@@ -33,14 +33,14 @@ public class AuthenticationController {
     @Autowired
     private UserRepository userRepository;
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid UserRequestDTO data){
+    public ResponseEntity login(@RequestBody @Valid UserRequest data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(),data.password());
         try{
             var auth = this.authenticationManager.authenticate(usernamePassword);
 
             var token = tokenService.generateToken((User) auth.getPrincipal());
 
-            return ResponseEntity.ok(new LoginResponseDTO(token));
+            return ResponseEntity.ok(new LoginResponse(token));
 
         }catch (AuthenticationException e){
             throw new UserPasswordNotExists("Usuário ou senha incorretos!!");
@@ -49,18 +49,18 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login/biometric")
-    public ResponseEntity<LoginResponseDTO> loginWithBiometrics(@RequestBody @Valid UserRequestDTO data) {
+    public ResponseEntity<LoginResponse> loginWithBiometrics(@RequestBody @Valid UserRequest data) {
         User user = (User) userRepository.findByEmail(data.email());
         if (user != null && userService.verifyBiometricData(user, data.biometricData())) {
             var token = tokenService.generateToken(user);
-            return ResponseEntity.ok(new LoginResponseDTO(token));
+            return ResponseEntity.ok(new LoginResponse(token));
         }
         throw new UserPasswordNotExists("Autenticação biométrica falhou!");
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponseDTO register(@RequestBody @Valid UserRequestDTO data){
+    public UserResponse register(@RequestBody @Valid UserRequest data){
         //if(userRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
         String encryptPassword = new BCryptPasswordEncoder().encode(data.password());
         User user = new User(data.email(),data.name(),encryptPassword,data.biometricData());

@@ -1,8 +1,8 @@
-package br.com.felipesoarestech.api.spaceif.domain.dto;
+package br.com.felipesoarestech.api.spaceif.domain.dto.input;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record TopicRequestDTO(
+public record TopicRequest(
         @NotBlank
         String tittle,
         @NotBlank
