@@ -2,6 +2,7 @@ package br.com.felipesoarestech.api.spaceif.api.controller;
 
 import br.com.felipesoarestech.api.spaceif.domain.dto.input.TopicRequest;
 import br.com.felipesoarestech.api.spaceif.domain.dto.output.PageResponse;
+import br.com.felipesoarestech.api.spaceif.domain.dto.output.TopicDetailsResponse;
 import br.com.felipesoarestech.api.spaceif.domain.dto.output.TopicResponse;
 import br.com.felipesoarestech.api.spaceif.domain.model.Topic;
 import br.com.felipesoarestech.api.spaceif.domain.repository.TopicRepository;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController()
@@ -45,6 +47,18 @@ public class TopicController {
     @GetMapping(value ="/byUser",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TopicResponse>> getAllTopicsByUser(@RequestParam(value = "id", required = false) int id) {
         return ResponseEntity.ok(repository.findByUserId(id).stream().map(TopicResponse::new).toList());
+    }
+
+    @GetMapping(value = "{topicId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TopicDetailsResponse> getTopicById(@PathVariable String topicId) {
+        Optional<Topic> topicOptional = repository.findById(topicId);
+
+        return topicOptional
+                .map(topic -> {
+                    TopicDetailsResponse response = new TopicDetailsResponse(topic);
+                    return ResponseEntity.ok(response);
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
 
