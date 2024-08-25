@@ -9,7 +9,6 @@ services:
     ports:
       - 8085:8085
     environment:
-      - DB_URL=${DB_URL}
       - DB_HOST=${DB_HOST}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
