@@ -1,6 +1,6 @@
 package br.com.felipesoarestech.api.spaceif.domain.service;
 
-import br.com.felipesoarestech.api.spaceif.domain.dto.UserResponseDTO;
+import br.com.felipesoarestech.api.spaceif.domain.dto.output.UserResponse;
 import br.com.felipesoarestech.api.spaceif.domain.model.User;
 import br.com.felipesoarestech.api.spaceif.domain.repository.UserRepository;
 import br.com.felipesoarestech.api.spaceif.domain.exception.DuplicateEntityException;
@@ -20,7 +20,7 @@ public class UserService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public UserResponseDTO register(User user){
+    public UserResponse register(User user){
         if(userRepository.findAll().contains(user)){
             throw new DuplicateEntityException("Email já cadastrado. Por favor, faça login ou recupere sua senha");
         }
@@ -40,9 +40,9 @@ public class UserService {
         }
     }
 
-    public UserResponseDTO mapearParaDTO(User user) {
-        UserResponseDTO userResponseDTO = modelMapper.map(user, UserResponseDTO.class);
-        return userResponseDTO;
+    public UserResponse mapearParaDTO(User user) {
+        UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+        return userResponse;
     }
 
     public boolean verifyBiometricData(User user, String biometricData) {
