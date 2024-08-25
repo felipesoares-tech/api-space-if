@@ -1,0 +1,19 @@
+version: "3.3"
+services:
+  finance-backend:
+    build: .
+    image: appspaceif
+    container_name: spaceifbackend
+    network_mode: worknet
+    restart: unless-stopped
+    ports:
+      - 8085:8085
+    environment:
+      - DB_URL=${DB_URL}
+      - DB_HOST=${DB_HOST}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - APP_PORT=${APP_PORT}
+    volumes:
+      - ${FINANCE_VOLUME}:/root
